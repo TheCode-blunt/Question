@@ -1,87 +1,114 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Question 💖</title>
-    <style>
-        body {
-            margin: 0;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
-            font-family: 'Poppins', sans-serif;
-            overflow: hidden;
-        }
+<meta charset="UTF-8">
+<title>Valentine 💖</title>
 
-        .container {
-            text-align: center;
-            z-index: 2;
-        }
+<style>
+    body {
+        margin: 0;
+        height: 100vh;
+        font-family: 'Poppins', sans-serif;
+        overflow: hidden;
+        background: url('background.jpg') center/cover no-repeat fixed;
+    }
 
-        h1 {
-            font-size: 2.8rem;
-            color: white;
-            margin-bottom: 40px;
-            text-shadow: 0px 4px 8px rgba(0,0,0,0.3);
-        }
+    /* Dark overlay for readability */
+    body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.35);
+        z-index: 0;
+    }
 
-        .buttons {
-            position: relative;
-            height: 150px;
-        }
+    .container {
+        position: relative;
+        z-index: 3;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        color: white;
+    }
 
-        button {
-            position: absolute;
-            padding: 15px 35px;
-            font-size: 1.2rem;
-            border: none;
-            border-radius: 40px;
-            cursor: pointer;
-            transition: 0.2s ease;
-        }
+    h1 {
+        font-size: 2.8rem;
+        margin-bottom: 40px;
+        text-shadow: 0 4px 12px rgba(0,0,0,0.6);
+    }
 
-        #yesBtn {
-            background: #ff4d6d;
-            color: white;
-            left: 40%;
-        }
+    .buttons {
+        position: relative;
+        width: 100%;
+        height: 200px;
+    }
 
-        #yesBtn:hover {
-            transform: scale(1.1);
-        }
+    button {
+        position: absolute;
+        padding: 15px 35px;
+        font-size: 1.2rem;
+        border: none;
+        border-radius: 40px;
+        cursor: pointer;
+    }
 
-        #noBtn {
-            background: white;
-            color: #ff4d6d;
-            left: 55%;
-        }
+    #yesBtn {
+        background: #ff4d6d;
+        color: white;
+        left: 40%;
+    }
 
-        .message {
-            display: none;
-            font-size: 2rem;
-            color: white;
-            margin-top: 30px;
-        }
+    #noBtn {
+        background: white;
+        color: #ff4d6d;
+        left: 55%;
+    }
 
-        .petal {
-            position: fixed;
-            top: -30px;
-            font-size: 24px;
-            user-select: none;
-            pointer-events: none;
-            animation: fall linear forwards;
-        }
+    /* Snow + hearts + roses */
+    .fall {
+        position: fixed;
+        top: -30px;
+        font-size: 22px;
+        pointer-events: none;
+        animation: fall linear forwards;
+        z-index: 2;
+    }
 
-        @keyframes fall {
-            to {
-                transform: translateY(110vh) rotate(360deg);
-                opacity: 0;
-            }
+    @keyframes fall {
+        to {
+            transform: translateY(110vh) rotate(360deg);
+            opacity: 0;
         }
-    </style>
+    }
+
+    /* Love screen */
+    .love-screen {
+        position: fixed;
+        inset: 0;
+        background: linear-gradient(135deg, #ff4d6d, #ff9a9e);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        color: white;
+        font-size: 2rem;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 1.5s ease;
+        z-index: 10;
+        padding: 40px;
+    }
+
+    .love-screen.show {
+        opacity: 1;
+        visibility: visible;
+    }
+</style>
 </head>
+
 <body>
 
 <audio id="bgMusic" loop>
@@ -92,59 +119,59 @@
     <h1>Will you be my Valentine, Riya? 💘</h1>
 
     <div class="buttons">
-        <button id="yesBtn">Yes 🥰</button>
+        <button id="yesBtn">Yes 😍</button>
         <button id="noBtn">No 🥶</button>
     </div>
+</div>
 
-    <div class="message" id="message">
-        💕 *Pad gayi na mere pyar me or kar message ka reply* 💕
-    </div>
+<div class="love-screen" id="loveScreen">
+    💖 Baby 💖<br><br>
+    In every snowfall,<br>
+    I see a reason to choose you.<br><br>
+    Always. ❤️
 </div>
 
 <script>
     const noBtn = document.getElementById("noBtn");
     const yesBtn = document.getElementById("yesBtn");
-    const message = document.getElementById("message");
     const bgMusic = document.getElementById("bgMusic");
+    const loveScreen = document.getElementById("loveScreen");
 
-    // Play music on first click (browser requirement)
+    // Music start
     document.body.addEventListener("click", () => {
         bgMusic.volume = 0.4;
         bgMusic.play();
     }, { once: true });
 
-    noBtn.addEventListener("mouseover", evade);
-    noBtn.addEventListener("click", evade);
-
-    function evade() {
+    // NO button escapes
+    function moveNo() {
         const x = Math.random() * (window.innerWidth - 150);
-        const y = Math.random() * (window.innerHeight - 150);
+        const y = Math.random() * (window.innerHeight - 60);
         noBtn.style.left = x + "px";
         noBtn.style.top = y + "px";
     }
 
+    noBtn.addEventListener("mouseover", moveNo);
+    noBtn.addEventListener("mousedown", moveNo);
+    noBtn.addEventListener("touchstart", moveNo);
+
+    // Continuous snow
+    setInterval(() => createFall("❄️"), 300);
+
+    // YES triggers romance
     yesBtn.addEventListener("click", () => {
-        message.style.display = "block";
-        startRain();
+        setInterval(() => createFall(Math.random() < 0.5 ? "❤️" : "🌹"), 250);
+        setTimeout(() => loveScreen.classList.add("show"), 3000);
     });
 
-    function startRain() {
-        const interval = setInterval(createPetal, 250);
-        setTimeout(() => clearInterval(interval), 8000);
-    }
-
-    function createPetal() {
-        const petal = document.createElement("div");
-        petal.className = "petal";
-
-        // Randomly choose red heart or rose emoji
-        petal.innerText = Math.random() < 0.5 ? "❤️" : "🌹";
-
-        petal.style.left = Math.random() * 100 + "vw";
-        petal.style.animationDuration = (3 + Math.random() * 3) + "s";
-
-        document.body.appendChild(petal);
-        setTimeout(() => petal.remove(), 7000);
+    function createFall(symbol) {
+        const el = document.createElement("div");
+        el.className = "fall";
+        el.innerText = symbol;
+        el.style.left = Math.random() * 100 + "vw";
+        el.style.animationDuration = (4 + Math.random() * 4) + "s";
+        document.body.appendChild(el);
+        setTimeout(() => el.remove(), 8000);
     }
 </script>
 
